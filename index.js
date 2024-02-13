@@ -7,37 +7,44 @@ const api = require("./api");
 const logger = require("./logger");
 const config = require("./config");
 const ageFunction = require("./counter/ageCounter");
-
+const {getFieldValue} = require("./utils");
+const {json} = require("express");
+const BDAY_FIELD_ID = 81223;
+const CUSTOM_FIELD_ID = 162427;
 
 const app = express();
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({extended: true}));
 
 api.getAccessToken().then(() => {
 	app.get("/ping", (req, res) => res.send("pong " + Date.now()));
-
-	app.post("/contacts", (req, res) => {
-		let age = ageFunction(req.body.contacts.add[0].custom_fields[0].values[0].value);
-		console.log(age);
-		console.log(req.body.contacts.add[0].custom_fields);
-		const id = req.body.contacts.add[0].id;
-		let data = {
-			custom_fields_values: [
-				{
-					field_id: 162427,
-					field_name: "Возраст",
-					values: [
-						{
-							value: age,
-						}
-					]
-				}
-			]
-		};
-		api.updateContact(data, id).then(res => console.log(res));
-		res.send("OK");
+	const hookController = async () => await app.post("/contacts", (req, res) => {
+		try {
+			const {contacts} = req.body;
+			const [{custom_fields}] = contacts.add;
+			const {id: contactId} = req.body.contacts.add[0];
+			const value = getFieldValue(custom_fields, BDAY_FIELD_ID);
+			const age = ageFunction(value);
+			const data = {
+				custom_fields_values: [
+					{
+						field_id: CUSTOM_FIELD_ID,
+						field_name: "Возраст",
+						values: [
+							{
+								value: age,
+							}
+						]
+					}
+				]
+			};
+			res.send("OK");
+			return api.updateContact(data, contactId);
+		} catch (e) {
+			return e.message;
+		}
 	});
-
+	hookController();
 	app.listen(config.PORT, () => logger.debug("Server started on ", config.PORT));
 });

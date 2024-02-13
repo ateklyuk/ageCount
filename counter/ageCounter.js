@@ -1,13 +1,13 @@
 module.exports = function getAgeFromBirthDate(birthDateString) {
 	const today = new Date();
-	const birthDateMass = birthDateString.split(".")
-	if (birthDateMass[2].length <= 2){
+	const [day, month, year] = birthDateString.split(".");
+	if (year.length <= 2){
 		return null;
-	};
+	}
 	const birthDate = new Date(
-		parseInt(birthDateMass[2]),
-		parseInt(birthDateMass[1]) - 1,
-		parseInt(birthDateMass[0])
+		parseInt(year),
+		parseInt(month) - 1,
+		parseInt(day)
 	);
 	let age = today.getFullYear() - birthDate.getFullYear();
 	if (today.getMonth() < birthDate.getMonth() ||
