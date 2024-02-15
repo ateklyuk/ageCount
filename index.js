@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 api.getAccessToken().then(() => {
-	app.get("/ping", (req, res) => res.send("pong " + Date.now()));
-	app.post("/contacts", hookController);
+	app.get(config.PING_ROUTE, (req, res) => res.send("pong " + Date.now()));
+	app.post(config.CONTACT_HOOK_ROUTE, hookController);
 	app.listen(config.PORT, () => logger.debug("Server started on ", config.PORT));
 });

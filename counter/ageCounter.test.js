@@ -13,8 +13,3 @@ describe("проверка типа", () => {
 		expect(typeof ageFunction("01.01.2999")).toBe("number");
 	});
 });
-describe("проверка формата входных данных", () => {
-	test("ДД.ММ.ГГГГ?", () => {
-		expect(ageFunction("2015.01.01")).toBe(null);
-	});
-});

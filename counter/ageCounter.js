@@ -7,11 +7,10 @@ module.exports = function getAgeFromBirthDate(birthDateString) {
 		parseInt(day)
 	);
 	const fullAge = today.getFullYear() - birthDate.getFullYear();
-	const wasBirthday = (today.getMonth() < birthDate.getMonth() || (today.getMonth() === birthDate.getMonth() && today.getDate() < birthDate.getDate()));
 	if (fullAge < 0){
 		return -1;
 	}
-	if (wasBirthday) {
-		return fullAge - 1;
-	} else return fullAge;
+	const wasBirthday = (today.getMonth() < birthDate.getMonth() || (today.getMonth() === birthDate.getMonth() && today.getDate() < birthDate.getDate()));
+	return wasBirthday ? fullAge - 1 : fullAge;
 };
+
