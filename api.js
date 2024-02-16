@@ -166,9 +166,9 @@ function Api() {
 			.then((res) => res.data);
 	});
 
-	// Обновить контакты
-	this.updateContacts = authChecker((data) => {
-		return axios.patch(`${ROOT_PATH}/api/v4/contacts`, [].concat(data), {
+	// Обновить контакт
+	this.updateContact = authChecker((data, id) => {
+		return axios.patch(`${ROOT_PATH}/api/v4/contacts/${id}`, data, {
 			headers: {
 				Authorization: `Bearer ${access_token}`,
 			},
