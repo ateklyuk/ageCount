@@ -8,7 +8,7 @@ module.exports = function getAgeFromBirthDate(birthDateString) {
 	);
 	const fullAge = today.getFullYear() - birthDate.getFullYear();
 	if (fullAge < 0){
-		return -1;
+		return 0;
 	}
 	const wasBirthday = (today.getMonth() < birthDate.getMonth() || (today.getMonth() === birthDate.getMonth() && today.getDate() < birthDate.getDate()));
 	return wasBirthday ? fullAge - 1 : fullAge;
